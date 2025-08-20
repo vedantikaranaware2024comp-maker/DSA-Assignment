@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    float t[3][7];
+
+    // Input
+    for (int i = 0; i < 3; i++) {
+        cout << "Enter temperatures for City " << i + 1 << " (7 days):\n";
+        for (int d = 0; d < 7; d++) {
+            cout << "Day " << d + 1 << ": ";
+            cin >> t[i][d];
+        }
+    }
+
+    // Day-wise average (across 3 cities)
+    cout << "\nAverage temperature for each day:\n";
+    for (int d = 0; d < 7; d++) {
+        float sum = 0;
+        for (int i = 0; i < 3; i++) sum += t[i][d];
+        cout << "Day " << d + 1 << ": " << sum / 3 << "\n";
+    }
+
+    // City-wise weekly average
+    cout << "\nAverage temperature for each city (weekly):\n";
+    for (int i = 0; i < 3; i++) {
+        float sum = 0;
+        for (int d = 0; d < 7; d++) sum += t[i][d];
+        cout << "City " << i + 1 << ": " << sum / 7 << "\n";
+    }
+
+    return 0;
+}
