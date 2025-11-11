@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class task {
+public:
+    string name;
+    int priority;
+    int executionTime;
+    task *next;
+
+    task() {
+        next = NULL;
+    }
+};
+
+int main() {
+    task *head = NULL;
+
+    int n;
+    cout << "Enter the number of tasks: ";
+    cin >> n;
+
+    // Insert tasks sorted by priority
+    for (int i = 0; i < n; i++) {
+        task *newtask = new task();
+        cout << "Enter the task name: ";
+        cin >> newtask->name;
+        cout << "Enter the priority: ";
+        cin >> newtask->priority;
+        cout << "Enter the execution time: ";
+        cin >> newtask->executionTime;
+
+        if (head == NULL || newtask->priority > head->priority) {
+            newtask->next = head;
+            head = newtask;
+        } else {
+            task* current = head;
+            task* previous = NULL;
+            while (current != NULL && current->priority >= newtask->priority) {
+                previous = current;
+                current = current->next;
+            }
+            previous->next = newtask;
+            newtask->next = current;
+        }
+    }
+
+    // Now build the list sorted by execution time
+    task* exe_head = NULL;  // New head for the execution-time sorted list
+    task* current = head;
+    while (current != NULL) {
+        task* newnode = new task();
+        newnode->name = current->name;
+        newnode->priority = current->priority;
+        newnode->executionTime = current->executionTime;
+        newnode->next = NULL;
+
+        if (exe_head == NULL || newnode->executionTime < exe_head->executionTime) {
+            newnode->next = exe_head;
+            exe_head = newnode;
+        } else {
+            task* p = exe_head;
+            while (p->next != NULL && p->next->executionTime <= newnode->executionTime) {
+                p = p->next;
+            }
+            newnode->next = p->next;
+            p->next = newnode;
+        }
+        current = current->next;
+    }
+
+    // Print the priority-sorted list
+    cout << "\nTasks sorted by Priority:\n";
+    task* temp = head;
+    while (temp != NULL) {
+        cout << "Priority: " << temp->priority << endl;
+        cout << "Task: " << temp->name << endl;
+        cout << "Execution Time: " << temp->executionTime << endl;
+        cout << "-----------------------------" << endl;
+        temp = temp->next;
+    }
+
+    // Print the execution-time-sorted list
+    cout << "\nTasks sorted by Execution Time:\n";
+    task* disp = exe_head;
+    while (disp != NULL) {
+        cout << "Execution Time: " << disp->executionTime << endl;
+        cout << "Task: " << disp->name << endl;
+        cout << "Priority: " << disp->priority << endl;
+        cout << "-----------------------------" << endl;
+        disp = disp->next;
+    }
+
+    return 0;
+}
+
