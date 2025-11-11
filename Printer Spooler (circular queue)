@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int front = -1, rear = -1;
+int n;
+string* job;
+
+void enqueue() {
+    string name;
+    cout << "Enter the name of job: ";
+    cin >> name;
+
+    if ((rear + 1) % n == front) {
+        cout << "Queue overflow.\n";
+        return;
+    }
+
+    if (front == -1) {
+        front = rear = 0;
+    } else {
+        rear = (rear + 1) % n;
+    }
+
+    job[rear] = name;
+    cout << name << " added to print spooler.\n";
+}
+
+void dequeue() {
+    if (front == -1) {
+        cout << "Queue is empty.\n";
+        return;
+    }
+
+    cout << "Removed job: " << job[front] << endl;
+
+    if (front == rear) {
+        front = rear = -1;
+    } else {
+        front = (front + 1) % n;
+    }
+}
+
+void display() {
+    if (front == -1) {
+        cout << "Queue is empty.\n";
+        return;
+    }
+
+    cout << "Current print jobs: ";
+    int i = front;
+    while (true) {
+        cout << job[i];
+        if (i == rear) break;
+        cout << " -> ";
+        i = (i + 1) % n;
+    }
+    cout << endl;
+}
+
+int main() {
+    cout << "Enter the maximum number of print jobs: ";
+    cin >> n;
+    job = new string[n];
+
+    int option;
+    do {
+        cout << "\n------ Printer Spooler Job ------\n";
+        cout << "1. Add job\n";
+        cout << "2. Remove job\n";
+        cout << "3. Display jobs\n";
+        cout << "4. Exit program\n";
+        cout << "Enter your choice: ";
+        cin >> option;
+
+        switch (option) {
+            case 1:
+                enqueue();
+                break;
+            case 2:
+                dequeue();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice.\n";
+        }
+    } while (option != 4);
+
+    delete[] job;
+    return 0;
+}
