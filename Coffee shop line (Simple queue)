@@ -1,0 +1,100 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class node {
+    public:
+    string data;
+    node*next;
+};
+
+class queue {
+    public:
+    node*front = NULL;
+    node*rear = NULL;
+    
+    void enqueue() {
+        string name;
+        cout<<"Enter the name of customer: ";
+        cin>>name;
+        node*newnode = new node();
+        newnode->data = name;
+        newnode->next = NULL;
+        
+        if(front == NULL) {
+            front = rear = newnode;
+        }
+        else {
+            rear->next = newnode;
+            rear = newnode;
+        }
+        cout<<newnode->data<<" added in queue.\n";
+    }
+    
+    void dequeue() {
+        if(front == NULL) {
+            cout<<"Queue is empty.\n";
+        }
+        else {
+            node*temp = front;
+            cout<<front->data<<" order is ready. they may leave the line.";
+            front = front->next;
+            
+            
+            }
+    }
+    
+    void display() {
+        node*temp = front;
+        while(temp != NULL) {
+            cout<<temp->data;
+            if(temp->next != NULL){
+                cout<<"->";
+            }
+            temp = temp->next;
+        }
+        cout<<endl;
+    }
+};
+
+int main() {
+    queue q;
+    int choice;
+    do {
+        cout<<"\n-----Coffee shop line------\n";
+        cout<<"1.Add the customer\n";
+        cout<<"2.Remove the customer.\n";
+        cout<<"3.Display the line.\n";
+        cout<<"4.Exit\n";
+        cout<<"Enter choice";
+        cin>>choice;
+        
+        switch(choice) {
+            case 1:
+            {
+                q.enqueue();
+                break;
+            }
+            case 2:
+            {
+                q.dequeue();
+                break;
+            }
+            case 3:
+            {
+                q.display();
+                break;
+            }
+            case 4:
+            {
+                cout<<"Exiting the program.\n";
+                break;
+            }
+            default:
+            {
+                cout<<"Invalid input,\n";
+            }
+        }
+    } while(choice != 4);
+    return 0;
+}
