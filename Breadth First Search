@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+
+const int MAX = 10;
+int graph[MAX][MAX];     // adjacency matrix
+bool visited[MAX];        // visited array
+int queueArr[MAX];        // manual queue
+int front = 0, rear = -1; // queue pointers
+
+// Function to add element to the queue
+void enqueue(int x) {
+    if (rear == MAX - 1) {
+        cout << "Queue overflow\n";
+        return;
+    }
+    rear++;
+    queueArr[rear] = x;
+}
+
+// Function to remove element from the queue
+int dequeue() {
+    if (front > rear) {
+        return -1; // queue empty
+    }
+    int x = queueArr[front];
+    front++;
+    return x;
+}
+
+// Check if queue is empty
+bool isEmpty() {
+    return (front > rear);
+}
+
+// BFS Function
+void BFS(int start, int n) {
+    // Mark start node as visited and enqueue it
+    visited[start] = true;
+    enqueue(start);
+
+    cout << "\nIndexing pages starting from " << start << endl;
+
+    // Continue until queue becomes empty
+    while (!isEmpty()) {
+        int node = dequeue(); // get next node from queue
+        cout << "Indexed page " << node << endl;
+
+        // Check all neighbors of this node
+        for (int i = 0; i < n; i++) {
+            if (graph[node][i] == 1 && !visited[i]) {
+                visited[i] = true;  // mark as visited
+                enqueue(i);          // add to queue
+            }
+        }
+    }
+}
+
+int main() {
+    int n, e;
+
+    cout << "Enter number of web pages: ";
+    cin >> n;
+
+    // Initialize arrays
+    for (int i = 0; i < n; i++) {
+        visited[i] = false;
+        for (int j = 0; j < n; j++) {
+            graph[i][j] = 0;
+        }
+    }
+
+    cout << "Enter number of hyperlinks: ";
+    cin >> e;
+
+    cout << "Enter the links (u v):\n";
+    for (int i = 0; i < e; i++) {
+        int u, v;
+        cin >> u >> v;
+        if (u >= 0 && u < n && v >= 0 && v < n)
+            graph[u][v] = 1; // directed link u -> v
+        else
+            cout << "Invalid link ignored.\n";
+    }
+
+    int start;
+    cout << "Enter the start page number: ";
+    cin >> start;
+
+    BFS(start, n);
+
+    return 0;
+}
